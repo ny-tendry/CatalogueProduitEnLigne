@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue des produits en ligne{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold mb-6 text-center">Catalogue des produits en ligne</h1>
+
+    <form method="get" class="mb-6 max-w-xl mx-auto flex flex-col sm:flex-row gap-4">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Recherche par nom" 
+            value="{{ app.request.get('search') }}" 
+            class="border border-gray-300 rounded px-4 py-2 flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+        <select name="category" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Toutes les catégories</option>
+            <option value="Tech" {% if app.request.get('category') == 'Tech' %}selected{% endif %}>Tech</option>
+            <option value="Art" {% if app.request.get('category') == 'Art' %}selected{% endif %}>Art</option>
+            <option value="Mobilier" {% if app.request.get('category') == 'Mobilier' %}selected{% endif %}>Mobilier</option>
+        </select>
+
+        <button type="submit" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 transition">Rechercher</button>
+    </form>
+
+    <div class="overflow-x-auto max-w-6xl mx-auto">
+        <table class="min-w-full border border-gray-300 rounded-md shadow-sm">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="text-left px-4 py-3 border-b border-gray-300">Id</th>
+                    <th class="text-left px-4 py-3 border-b border-gray-300">Nom</th>
+                    <th class="text-left px-4 py-3 border-b border-gray-300">Description</th>
+                    <th class="text-left px-4 py-3 border-b border-gray-300">Prix</th>
+                    <th class="text-left px-4 py-3 border-b border-gray-300">Catégorie</th>
+                    <th class="text-left px-4 py-3 border-b border-gray-300">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr class="hover:bg-gray-50 even:bg-white odd:bg-gray-50">
+                        <td class="px-4 py-3 border-b border-gray-200">{{ product.id }}</td>
+                        <td class="px-4 py-3 border-b border-gray-200">{{ product.nomProduit }}</td>
+                        <td class="px-4 py-3 border-b border-gray-200">{{ product.descriptionProduit }}</td>
+                        <td class="px-4 py-3 border-b border-gray-200">{{ product.prixProduit }} Ar</td>
+                        <td class="px-4 py-3 border-b border-gray-200">{{ product.categorieProduit }}</td>
+                        <td class="px-4 py-3 border-b border-gray-200 space-x-2">
+                            <a href="{{ path('app_product_show', {'id': product.id}) }}" class="text-blue-600 hover:underline">Voir</a>
+                            <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="text-green-600 hover:underline">Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-6 text-gray-500">Aucun produit trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="max-w-6xl mx-auto mt-6">
+        <a href="{{ path('app_product_new') }}" class="inline-block bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition">
+            Créer un nouveau produit
+        </a>
+    </div>
+    <div class="flex items-center justify-center mt-6">
+        <h2>Nom: NY Aina Tendrisoa Andrianina <br> N°185 L1B</h2>
+    </div>
+    
+{% endblock %}
